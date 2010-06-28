@@ -9,10 +9,16 @@ describe Spira::Types::String do
       serialized.should == RDF::Literal.new("a string")
     end
 
-    it "should serialize strings with language tags to XSD strings" do
+    it "should serialize strings with two-letter language tags to XSD strings" do
       serialized = Spira::Types::String.serialize('"a string"@en')
       serialized.should be_a RDF::Literal
       serialized.should == RDF::Literal.new("a string", :language => :en)
+    end
+
+    it "should serialize strings with full language tags to XSD strings" do
+      serialized = Spira::Types::String.serialize('"a string"@en-US')
+      serialized.should be_a RDF::Literal
+      serialized.should == RDF::Literal.new("a string", :language => :"en-US")
     end
 
     it "should serialize other types to XSD strings" do
@@ -29,10 +35,16 @@ describe Spira::Types::String do
       value.should == "a string"
     end
 
-    it "should unserialize XSD strings to strings with language tags" do
+    it "should unserialize XSD strings to strings with two-letter language tags" do
       value = Spira::Types::String.unserialize(RDF::Literal.new("a string", :datatype => RDF::XSD.string, :language => :en))
       value.should be_a String
       value.should == '"a string"@en'
+    end
+
+    it "should unserialize XSD strings to strings with full language tags" do
+      value = Spira::Types::String.unserialize(RDF::Literal.new("a string", :datatype => RDF::XSD.string, :language => :"en-US"))
+      value.should be_a String
+      value.should == '"a string"@en-US'
     end
 
     it "should unserialize anything else to a string" do

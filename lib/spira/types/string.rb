@@ -23,7 +23,7 @@ module Spira::Types
 
     def self.serialize(value)
       s = value.to_s
-      if /^"(.+)"@([A-Za-z]{2})$/.match(s)
+      if /^"(.*)"@([A-Za-z]+(\-\w+)?)$/.match(s)
         RDF::Literal.new($1, :language => $2)
       else
         RDF::Literal.new(s)
